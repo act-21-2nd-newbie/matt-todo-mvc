@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="todoapp">
-    <Header msg="todos" @send-todo="pushTodoItem"/>
+    <Header @send-todo="pushTodoItem"/>
     <Main :todo-list="todoList" @change-status="changeStatus"
           :toggle-all-flag="toggleAllFlag" @click-toggle-all-btn="changeAllToggle"
           @delete-item="deleteTodoItem"/>

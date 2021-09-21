@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <h1>{{ msg }}</h1>
+    <h1>todos</h1>
     <BaseInput @input="insertValue" @enter="sendTodoName" :value="todoName"/>
   </div>
 </template>
@@ -10,9 +10,6 @@ import BaseInput from "@/components/BaseInput";
 
 export default {
   name: 'Header',
-  props: {
-    msg: String,
-  },
   data(){
     return{
       todoName : ""
