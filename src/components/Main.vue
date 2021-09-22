@@ -1,7 +1,7 @@
 <template>
   <section class="main">
     <input id="toggle-all" type="checkbox"
-           :class="todoList.length === 0? 'hidden':'toggle-all'" :checked="toggleAllFlag"
+           :class="toggleAllShowFlag? 'hidden':'toggle-all'" :checked="toggleAllFlag"
            @click="$emit('click-toggle-all-btn',  $event.target.checked)">
     <label for="toggle-all"></label>
     <ul class="todo-list" v-for="todoItem in todoList" :key="todoItem.id">
@@ -20,6 +20,7 @@ export default {
   props: {
     todoList : Array,
     toggleAllFlag : Boolean,
+    toggleAllShowFlag : Boolean,
   },
   methods:{
     changeToggle(id){

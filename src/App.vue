@@ -2,7 +2,7 @@
   <div>
     <div id="app" class="todoapp">
       <Header @send-todo="pushTodoItem"/>
-      <Main :todo-list="visibleTodoList" :toggle-all-flag="toggleAllFlag"
+      <Main :todo-list="visibleTodoList" :toggle-all-flag="toggleAllFlag" :toggle-all-show-flag="todoList.length === 0"
             @change-status="changeStatus" @click-toggle-all-btn="changeAllToggle"
             @delete-item="deleteTodoItem"/>
       <Footer :class="todoList.length === 0? 'hidden':''" :todo-item-count="countActiveTodoItem"
@@ -73,8 +73,7 @@ export default {
     },
     pushTodoItem(value){
       //Active(초기값) : false, Completed : true
-      this.todoList.push({id : this.lastTodoItemId, name : value, status: false });
-      this.lastTodoItemId++;
+      this.todoList.push({id : this.lastTodoItemId++, name : value, status: false });
       this.checkAllStatus();
       this.changeVisibleTodoList();
     },
@@ -87,6 +86,7 @@ export default {
     changeAllToggle(){
       this.toggleAllFlag = this.toggleAllFlag === false;
       this.todoList.forEach(todoItem => todoItem.status = this.toggleAllFlag);
+      this.checkAllStatus();
       this.changeVisibleTodoList();
     },
     deleteTodoItem(id) {
