@@ -2,7 +2,7 @@
   <div>
     <div id="app" class="todoapp">
       <Header @send-todo="pushTodoItem"/>
-      <Main :todo-list="visibility === 'All'? todoList : visibleTodoList" :toggle-all-flag="toggleAllFlag"
+      <Main :todo-list="visibleTodoList" :toggle-all-flag="toggleAllFlag"
             @change-status="changeStatus" @click-toggle-all-btn="changeAllToggle"
             @delete-item="deleteTodoItem"/>
       <Footer :class="todoList.length === 0? 'hidden':''" :todo-item-count="countActiveTodoItem"
@@ -31,6 +31,7 @@ export default {
       visibleTodoList : [],
       toggleAllFlag : false,
       clearCompletedFlag : false,
+      lastTodoItemId : 0,
     }
   },
   components: {
@@ -41,8 +42,8 @@ export default {
   computed:{
     countActiveTodoItem(){
       let count = 0;
-      for(const ele of this.todoList){
-        if(ele.status === false) count++;
+      for(const todoItem of this.todoList){
+        if(todoItem.status === false) count++;
       }
       return count;
     }
@@ -53,37 +54,56 @@ export default {
       let taflag = true;
       let ccFlag = false;
 
-      for(const ele of this.todoList){
-        if(ele.status === true) ccFlag = true;
-        taflag *= ele.status;
+      for(const todoItem of this.todoList){
+        if(todoItem.status === true) ccFlag = true;
+        taflag *= todoItem.status;
       }
 
       this.toggleAllFlag = taflag === 1? true : false;
       this.clearCompletedFlag = ccFlag;
     },
-    pushTodoItem(value){
-      this.todoList.push({name: value, status: false });
-      this.checkAllStatus();
+    //todoList에 filter 적용
+    changeVisibleTodoList(){
+      if(this.visibility === 'Active')
+        this.visibleTodoList = this.todoList.filter(todoItem =>  todoItem.status === false);
+      else if(this.visibility === 'Completed')
+        this.visibleTodoList = this.todoList.filter(todoItem =>  todoItem.status === true);
+      else
+        this.visibleTodoList = this.todoList;
     },
-    changeStatus(idx){
+    pushTodoItem(value){
+      //Active(초기값) : false, Completed : true
+      this.todoList.push({id : this.lastTodoItemId, name : value, status: false });
+      this.lastTodoItemId++;
+      this.checkAllStatus();
+      this.changeVisibleTodoList();
+    },
+    changeStatus(id){
+      const idx = this.todoList.findIndex(todoItem => todoItem.id === id);
       this.todoList[idx].status = this.todoList[idx].status === false;
       this.checkAllStatus();
+      this.changeVisibleTodoList();
     },
     changeAllToggle(){
       this.toggleAllFlag = this.toggleAllFlag === false;
-      this.todoList.forEach(ele => ele.status = this.toggleAllFlag);
+      this.todoList.forEach(todoItem => todoItem.status = this.toggleAllFlag);
+      this.changeVisibleTodoList();
     },
-    deleteTodoItem(idx) {
+    deleteTodoItem(id) {
+      const idx = this.todoList.findIndex(todoItem => todoItem.id === id);
       this.todoList.splice(idx, 1);
       this.checkAllStatus();
+      this.changeVisibleTodoList();
     },
     deleteAllTodoItem(){
-      this.todoList = this.todoList.filter(todoItem => todoItem.status !== true);
+      this.todoList = this.todoList.filter(todoItem => todoItem.status === false);
       this.checkAllStatus();
+      this.changeVisibleTodoList();
     },
     changeVisibleTodoItem(value){
       this.visibility=value;
-    }
+      this.changeVisibleTodoList();
+    },
   }
 }
 </script>

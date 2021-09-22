@@ -4,8 +4,8 @@
            :class="todoList.length === 0? 'hidden':'toggle-all'" :checked="toggleAllFlag"
            @click="$emit('click-toggle-all-btn',  $event.target.checked)">
     <label for="toggle-all"></label>
-    <ul class="todo-list" v-for="(todoItem, index) in todoList" :key="todoItem.number">
-      <TodoItem :number="index" :name="todoItem.name" :status="todoItem.status"
+    <ul class="todo-list" v-for="todoItem in todoList" :key="todoItem.id">
+      <TodoItem :id="todoItem.id" :name="todoItem.name" :status="todoItem.status"
                 @click-toggle-btn="changeToggle" @click-delete-btn="deleteTodoItem"/>
     </ul>
   </section>
@@ -22,11 +22,11 @@ export default {
     toggleAllFlag : Boolean,
   },
   methods:{
-    changeToggle(idx){
-      this.$emit('change-status', idx);
+    changeToggle(id){
+      this.$emit('change-status', id);
     },
-    deleteTodoItem(idx){
-      this.$emit('delete-item', idx);
+    deleteTodoItem(id){
+      this.$emit('delete-item', id);
     }
   }
 }
