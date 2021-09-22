@@ -1,10 +1,15 @@
 <template>
   <footer class="footer">
     <span class="todo-count"><strong>1</strong>item left</span>
-    <ul class="filters">
-      <li><a href="#/all" class="selected">All</a></li>
-      <li><a href="#/active" class="">Active</a></li>
-      <li><a href="#/completed" class="">Completed</a></li>
+    <!--
+    <ul class="filters" @click="$emit('change-visibile-item', href())">
+      <li><a href="#/all" :class="chooseStatus === 'all'? 'selected' : ''">All</a></li>
+      <li><a href="#/active" :class="chooseStatus === 'active'? 'selected' : ''">Active</a></li>
+      <li><a href="#/completed" :class="chooseStatus === 'completed'? 'selected' : ''">Completed</a></li>
+    </ul>
+    -->
+    <ul class="filters" v-for="statusItem in statusList" :key="statusItem">
+      <li><a :class="chooseStatus === statusItem? 'selected' : ''" @click="$emit('change-visibile-item', statusItem)">{{statusItem}}</a></li>
     </ul>
     <button class="clear-completed" style="display: flex;">Clear completed</button>
   </footer>
@@ -15,8 +20,9 @@
 export default {
   name: 'Footer',
   props: {
-    msg: String
-  }
+    chooseStatus: String,
+    statusList : Array,
+  },
 }
 </script>
 

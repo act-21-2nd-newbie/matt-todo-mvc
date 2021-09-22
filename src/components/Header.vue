@@ -12,7 +12,7 @@ export default {
   name: 'Header',
   data(){
     return{
-      todoName : ""
+      todoName : ''
     }
   },
   components:{BaseInput},

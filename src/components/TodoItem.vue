@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "TodoItem",
+  name: 'TodoItem',
   props:{
     number: Number,
     name : String,

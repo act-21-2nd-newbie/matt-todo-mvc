@@ -4,7 +4,7 @@
     <Main :todo-list="todoList" @change-status="changeStatus"
           :toggle-all-flag="toggleAllFlag" @click-toggle-all-btn="changeAllToggle"
           @delete-item="deleteTodoItem"/>
-    <Footer msg=""/>
+    <Footer :status-list="statusList" :choose-status="visibility" @change-visibile-item="changeVisibleTodoItem"/>
   </div>
 </template>
 
@@ -19,6 +19,8 @@ export default {
     return{
       todoList : [],
       toggleAllFlag : false,
+      visibility : 'all',
+      statusList : ['All', 'Active', 'Completed'],
     }
   },
   components: {
@@ -46,11 +48,15 @@ export default {
     changeAllToggle(){
       this.toggleAllFlag = this.toggleAllFlag === false;
       this.todoList.forEach(ele => ele.status = this.toggleAllFlag);
+
     },
     deleteTodoItem(idx) {
       this.todoList.splice(idx, 1);
       this.checkAllStatus();
-    }
+    },
+    changeVisibleTodoItem(){
+      this.visibility=document.location.href.split('/').slice(-1)[0];
+      console.log( this.visibility);    }
   }
 }
 </script>
