@@ -2,12 +2,12 @@
   <div>
     <div id="app" class="todoapp">
       <Header @send-todo="pushTodoItem"/>
-      <Main :todo-list="todoList" :toggle-all-flag="toggleAllFlag"
+      <Main :todo-list="visibility === 'All'? todoList : visibleTodoList" :toggle-all-flag="toggleAllFlag"
             @change-status="changeStatus" @click-toggle-all-btn="changeAllToggle"
             @delete-item="deleteTodoItem"/>
-      <Footer :class="todoList.length === 0? 'hidden':''" :todo-item-count="todoList.length"
+      <Footer :class="todoList.length === 0? 'hidden':''" :todo-item-count="countActiveTodoItem"
               :choose-status="visibility" :clear-completed-flag="clearCompletedFlag"
-              @change-visibile-item="changeVisibleTodoItem"/>
+              @change-visibile-item="changeVisibleTodoItem" @delete-all-item="deleteAllTodoItem"/>
     </div>
     <div class="info">
       <p>Double-click to edit a todo</p>
@@ -28,6 +28,7 @@ export default {
     return{
       todoList : [],
       visibility : 'All',
+      visibleTodoList : [],
       toggleAllFlag : false,
       clearCompletedFlag : false,
     }
@@ -36,6 +37,15 @@ export default {
     Header,
     Main,
     Footer
+  },
+  computed:{
+    countActiveTodoItem(){
+      let count = 0;
+      for(const ele of this.todoList){
+        if(ele.status === false) count++;
+      }
+      return count;
+    }
   },
   methods:{
     //모든 아이템을 돌고, 전체선택 토글을 바꾸고 clear-completed버튼 기능 활성화
@@ -67,9 +77,12 @@ export default {
       this.todoList.splice(idx, 1);
       this.checkAllStatus();
     },
+    deleteAllTodoItem(){
+      this.todoList = this.todoList.filter(todoItem => todoItem.status !== true);
+      this.checkAllStatus();
+    },
     changeVisibleTodoItem(value){
       this.visibility=value;
-      //console.log(this.visibility);
     }
   }
 }

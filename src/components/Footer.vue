@@ -16,7 +16,8 @@
       <li><a :class="chooseStatus === 'Active'? 'selected' : ''">Active</a></li>
       <li><a :class="chooseStatus === 'Completed'? 'selected' : ''">Completed</a></li>
     </ul>
-    <button :class="clearCompletedFlag === true? 'clear-completed' : 'hidden'">Clear completed</button>
+    <button :class="clearCompletedFlag === true? 'clear-completed' : 'hidden'"
+            @click="$emit('delete-all-item')">Clear completed</button>
   </footer>
 </template>
 
