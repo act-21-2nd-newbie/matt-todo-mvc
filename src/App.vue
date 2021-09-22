@@ -1,10 +1,17 @@
 <template>
-  <div id="app" class="todoapp">
-    <Header @send-todo="pushTodoItem"/>
-    <Main :todo-list="todoList" @change-status="changeStatus"
-          :toggle-all-flag="toggleAllFlag" @click-toggle-all-btn="changeAllToggle"
-          @delete-item="deleteTodoItem"/>
-    <Footer :status-list="statusList" :choose-status="visibility" @change-visibile-item="changeVisibleTodoItem"/>
+  <div>
+    <div id="app" class="todoapp">
+      <Header @send-todo="pushTodoItem"/>
+      <Main :todo-list="todoList" @change-status="changeStatus"
+            :toggle-all-flag="toggleAllFlag" @click-toggle-all-btn="changeAllToggle"
+            @delete-item="deleteTodoItem"/>
+      <Footer :status-list="statusList" :choose-status="visibility" @change-visibile-item="changeVisibleTodoItem"/>
+    </div>
+    <div class="info">
+      <p>Double-click to edit a todo</p>
+      <p>Written by Matt</p>
+      <p>Part of TodoMVC</p>
+    </div>
   </div>
 </template>
 
@@ -54,9 +61,10 @@ export default {
       this.todoList.splice(idx, 1);
       this.checkAllStatus();
     },
-    changeVisibleTodoItem(){
-      this.visibility=document.location.href.split('/').slice(-1)[0];
-      console.log( this.visibility);    }
+    changeVisibleTodoItem(value){
+      this.visibility=value;
+      console.log(this.visibility);
+    }
   }
 }
 </script>
