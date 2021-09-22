@@ -1,5 +1,5 @@
 <template>
-  <li class="todo">
+  <li :class="status === false? 'todo' : 'todo completed'">
     <div class="view">
       <input type="checkbox" class="toggle"
              @click="$emit('click-toggle-btn', number)" :checked="status">

@@ -5,7 +5,7 @@
       <Main :todo-list="todoList" @change-status="changeStatus"
             :toggle-all-flag="toggleAllFlag" @click-toggle-all-btn="changeAllToggle"
             @delete-item="deleteTodoItem"/>
-      <Footer :status-list="statusList" :choose-status="visibility" @change-visibile-item="changeVisibleTodoItem"/>
+      <Footer :todo-item-count="todoList.length" :choose-status="visibility" @change-visibile-item="changeVisibleTodoItem"/>
     </div>
     <div class="info">
       <p>Double-click to edit a todo</p>
@@ -26,8 +26,7 @@ export default {
     return{
       todoList : [],
       toggleAllFlag : false,
-      visibility : 'all',
-      statusList : ['All', 'Active', 'Completed'],
+      visibility : 'All',
     }
   },
   components: {

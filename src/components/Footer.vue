@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <span class="todo-count"><strong>1</strong>item left</span>
+    <span class="todo-count"><strong>{{todoItemCount}}</strong> item left</span>
     <!--
     <ul class="filters" @click="$emit('change-visibile-item', href())">
       <li><a href="#/all" :class="chooseStatus === 'all'? 'selected' : ''">All</a></li>
@@ -26,13 +26,8 @@ export default {
   name: 'Footer',
   props: {
     chooseStatus: String,
-    statusList : Array,
+    todoItemCount : Number,
   },
-  methods:{
-    showLog(){
-      console.log("");
-    }
-  }
 }
 </script>
 
