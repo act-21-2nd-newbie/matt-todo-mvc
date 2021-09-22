@@ -16,7 +16,7 @@
       <li><a :class="chooseStatus === 'Active'? 'selected' : ''">Active</a></li>
       <li><a :class="chooseStatus === 'Completed'? 'selected' : ''">Completed</a></li>
     </ul>
-    <button class="clear-completed" style="display: flex;">Clear completed</button>
+    <button :class="clearCompletedFlag === true? 'clear-completed' : 'hidden'">Clear completed</button>
   </footer>
 </template>
 
@@ -27,6 +27,7 @@ export default {
   props: {
     chooseStatus: String,
     todoItemCount : Number,
+    clearCompletedFlag : Boolean,
   },
 }
 </script>

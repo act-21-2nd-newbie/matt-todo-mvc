@@ -1,6 +1,6 @@
 <template>
-  <input class="new-todo" @input="$emit('input', $event.target.value)"
-         @keyup.enter="$emit('enter')" :value="value" autofocus="autofocus" autocomplete="off" placeholder='What needs to be done?' />
+  <input class="new-todo" autofocus="autofocus" autocomplete="off" placeholder='What needs to be done?'
+         :value="value" @input="$emit('input', $event.target.value)" @keyup.enter="$emit('enter')"/>
 </template>
 
 <script>

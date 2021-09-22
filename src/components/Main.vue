@@ -1,7 +1,8 @@
 <template>
   <section class="main">
-    <input id="toggle-all" type="checkbox" class="toggle-all"
-           :checked="toggleAllFlag" @click="$emit('click-toggle-all-btn',  $event.target.checked)">
+    <input id="toggle-all" type="checkbox"
+           :class="todoList.length === 0? 'hidden':'toggle-all'" :checked="toggleAllFlag"
+           @click="$emit('click-toggle-all-btn',  $event.target.checked)">
     <label for="toggle-all"></label>
     <ul class="todo-list" v-for="(todoItem, index) in todoList" :key="todoItem.number">
       <TodoItem :number="index" :name="todoItem.name" :status="todoItem.status"

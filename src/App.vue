@@ -2,10 +2,12 @@
   <div>
     <div id="app" class="todoapp">
       <Header @send-todo="pushTodoItem"/>
-      <Main :todo-list="todoList" @change-status="changeStatus"
-            :toggle-all-flag="toggleAllFlag" @click-toggle-all-btn="changeAllToggle"
+      <Main :todo-list="todoList" :toggle-all-flag="toggleAllFlag"
+            @change-status="changeStatus" @click-toggle-all-btn="changeAllToggle"
             @delete-item="deleteTodoItem"/>
-      <Footer :todo-item-count="todoList.length" :choose-status="visibility" @change-visibile-item="changeVisibleTodoItem"/>
+      <Footer :class="todoList.length === 0? 'hidden':''" :todo-item-count="todoList.length"
+              :choose-status="visibility" :clear-completed-flag="clearCompletedFlag"
+              @change-visibile-item="changeVisibleTodoItem"/>
     </div>
     <div class="info">
       <p>Double-click to edit a todo</p>
@@ -25,8 +27,9 @@ export default {
   data(){
     return{
       todoList : [],
-      toggleAllFlag : false,
       visibility : 'All',
+      toggleAllFlag : false,
+      clearCompletedFlag : false,
     }
   },
   components: {
@@ -35,13 +38,18 @@ export default {
     Footer
   },
   methods:{
+    //모든 아이템을 돌고, 전체선택 토글을 바꾸고 clear-completed버튼 기능 활성화
     checkAllStatus(){
-      let flag = true;
+      let taflag = true;
+      let ccFlag = false;
+
       for(const ele of this.todoList){
-        flag *= ele.status;
+        if(ele.status === true) ccFlag = true;
+        taflag *= ele.status;
       }
-      if(flag === 1) this.toggleAllFlag = true;
-      else this.toggleAllFlag = false;
+
+      this.toggleAllFlag = taflag === 1? true : false;
+      this.clearCompletedFlag = ccFlag;
     },
     pushTodoItem(value){
       this.todoList.push({name: value, status: false });
@@ -54,7 +62,6 @@ export default {
     changeAllToggle(){
       this.toggleAllFlag = this.toggleAllFlag === false;
       this.todoList.forEach(ele => ele.status = this.toggleAllFlag);
-
     },
     deleteTodoItem(idx) {
       this.todoList.splice(idx, 1);
@@ -62,7 +69,7 @@ export default {
     },
     changeVisibleTodoItem(value){
       this.visibility=value;
-      console.log(this.visibility);
+      //console.log(this.visibility);
     }
   }
 }
