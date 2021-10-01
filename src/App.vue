@@ -21,6 +21,7 @@
 import Header from './components/Header.vue'
 import Main from './components/Main.vue'
 import Footer from './components/Footer.vue'
+import {showTodoList, deleteTodoItemById, postTodoItem, changeStatusOfTodoItemById} from "@/service/todo-service";
 
 export default {
   name: 'App',
@@ -33,6 +34,9 @@ export default {
       clearCompletedFlag : false,
       lastTodoItemId : 0,
     }
+  },
+  async mounted() {
+    await this.updateViewTodoList();
   },
   components: {
     Header,
@@ -71,39 +75,49 @@ export default {
       else
         this.visibleTodoList = this.todoList;
     },
-    pushTodoItem(value){
+    async pushTodoItem(value){
       //Active(초기값) : false, Completed : true
-      this.todoList.push({id : this.lastTodoItemId++, name : value, status: false });
-      this.checkAllStatus();
-      this.changeVisibleTodoList();
+      await postTodoItem(value);
+      await this.updateViewTodoList();
     },
-    changeStatus(id){
+    async changeStatus(id){
       const idx = this.todoList.findIndex(todoItem => todoItem.id === id);
-      this.todoList[idx].status = this.todoList[idx].status === false;
-      this.checkAllStatus();
-      this.changeVisibleTodoList();
+      await changeStatusOfTodoItemById(id, this.todoList[idx].status);
+      await this.updateViewTodoList();
     },
-    changeAllToggle(){
-      this.toggleAllFlag = this.toggleAllFlag === false;
-      this.todoList.forEach(todoItem => todoItem.status = this.toggleAllFlag);
-      this.checkAllStatus();
-      this.changeVisibleTodoList();
+    async changeAllToggle(){
+      const requests = this.todoList.filter(
+          todoItem => todoItem.status === this.toggleAllFlag
+      ).map(
+          todoItem => changeStatusOfTodoItemById(todoItem.id, this.toggleAllFlag)
+      );
+      await Promise.all(requests);
+      await this.updateViewTodoList();
     },
-    deleteTodoItem(id) {
-      const idx = this.todoList.findIndex(todoItem => todoItem.id === id);
-      this.todoList.splice(idx, 1);
-      this.checkAllStatus();
-      this.changeVisibleTodoList();
+    async deleteTodoItem(id) {
+      await deleteTodoItemById(id);
+      await this.updateViewTodoList();
     },
-    deleteAllTodoItem(){
-      this.todoList = this.todoList.filter(todoItem => todoItem.status === false);
-      this.checkAllStatus();
-      this.changeVisibleTodoList();
+    async deleteAllTodoItem(){
+      const requests = this.todoList.filter(
+          todoItem => todoItem.status === true
+      ).map(
+          todoItem => deleteTodoItemById(todoItem.id)
+      );
+      await Promise.all(requests);
+      await this.updateViewTodoList();
     },
     changeVisibleTodoItem(value){
       this.visibility=value;
       this.changeVisibleTodoList();
     },
+    async updateViewTodoList(){
+      const response = await showTodoList();
+      this.todoList = response;
+      this.visibleTodoList = response;
+      await this.checkAllStatus();
+      await this.changeVisibleTodoList();
+    }
   }
 }
 </script>

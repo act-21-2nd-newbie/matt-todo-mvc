@@ -13,7 +13,7 @@
 export default {
   name: 'TodoItem',
   props:{
-    id: Number,
+    id: String,
     name : String,
     status : Boolean,
   },
